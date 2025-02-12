@@ -1,0 +1,145 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <title>Add Habit</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+            background-color: #f4f4f4;
+        }
+        .navbar {
+            background: #333;
+            color: white;
+            padding: 15px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        .navbar a {
+            color: white;
+            text-decoration: none;
+            padding: 10px 15px;
+        }
+        .navbar a:hover {
+            background: #555;
+        }
+        .container {
+            max-width: 500px;
+            margin: 20px auto;
+            padding: 20px;
+            background: white;
+            border-radius: 10px;
+            box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.1);
+            text-align: center;
+        }
+        input, select, button {
+            width: 100%;
+            padding: 10px;
+            margin: 10px 0;
+            border: none;
+            border-radius: 5px;
+        }
+        input, select {
+            border: 1px solid #ccc;
+        }
+        button {
+            background: #28a745;
+            color: white;
+            cursor: pointer;
+        }
+        button:hover {
+            background: #218838;
+        }
+        .message {
+            color: red;
+        }
+    </style>
+</head>
+<body>
+
+    <!-- ✅ Navigation Bar -->
+    <div class="navbar">
+        <div>Habit Tracker</div>
+        <div>
+            <a href="dashboard.html">Home</a>
+            <a href="addHabit.html">Add Habit</a>
+            <a href="status.html">View Status</a>
+            <a href="priority.html">Priority-wise Habits</a>
+            <a href="index.html">Logout</a>
+        </div>
+    </div>
+
+    <!-- ✅ Add Habit Form -->
+    <div class="container">
+        <h2>Add a New Habit</h2>
+        <form id="habitForm">
+            <input type="text" id="habitName" placeholder="Habit Name" required>
+            <input type="text" id="habitCategory" placeholder="Category" required>
+            <label>Start Date:</label>
+            <input type="date" id="startDate" required>
+            <label>End Date:</label>
+            <input type="date" id="endDate" required>
+
+            <label>Priority (1-10):</label>
+            <input type="number" id="priority" min="1" max="10" required>
+    
+            <label>Goal Description:</label>
+            <textarea id="goalDescription" placeholder="Describe your goal..." rows="3" required></textarea>
+    
+
+            <select id="status">
+                <option value="Not Started">Not Started</option>
+                <option value="In Progress">In Progress</option>
+                <option value="Completed">Completed</option>
+            </select>
+            <button type="submit">Add Habit</button>
+        </form>
+        <p class="message" id="message"></p>
+        <a href="dashboard.html">Back to Dashboard</a>
+    </div>
+
+    <script>
+        document.getElementById("habitForm").addEventListener("submit", async function(event) {
+            event.preventDefault();
+
+            const user = JSON.parse(localStorage.getItem("user"));
+            if (!user) {
+                window.location.href = "index.html";
+                return;
+            }
+            // console.log(user);
+            const habitData = {
+                userId: user.email,  // Associate habit with user
+                name: document.getElementById("habitName").value.trim(),
+                category: document.getElementById("habitCategory").value.trim(),
+                startDate: document.getElementById("startDate").value,
+                endDate: document.getElementById("endDate").value,
+                priority: document.getElementById("priority").value,  // New Priority Field
+                goalDescription: document.getElementById("goalDescription").value.trim(), 
+                status: document.getElementById("status").value
+            };
+
+            const response = await fetch("http://localhost:3000/api/habits/add", {
+                method: "POST",
+                headers: { "Content-Type": "application/json" },
+                body: JSON.stringify(habitData)
+            });
+            console.log("got responce");
+            const result = await response.json();
+            const message = document.getElementById("message");
+
+            if (result.success) {
+                message.style.color = "green";
+                message.innerText = "Habit added successfully!";
+                setTimeout(() => window.location.href = "dashboard.html", 1000);
+            } else {
+                message.style.color = "red";
+                message.innerText = result.error || "Failed to add habit.";
+            }
+        });
+    </script>
+
+</body>
+</html>

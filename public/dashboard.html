@@ -1,0 +1,189 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <title>Habit Tracker Dashboard</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+            background-color: #f4f4f4;
+        }
+        .navbar {
+            background: #333;
+            color: white;
+            padding: 15px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        .navbar a {
+            color: white;
+            text-decoration: none;
+            padding: 10px 15px;
+        }
+        .navbar a:hover {
+            background: #555;
+        }
+        .container {
+            max-width: 800px;
+            margin: 20px auto;
+            padding: 20px;
+            background: white;
+            border-radius: 10px;
+            box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.1);
+        }
+        h2 {
+            text-align: center;
+        }
+        #taskList {
+            list-style: none;
+            padding: 0;
+        }
+        .task {
+            background: #e3f2fd;
+            padding: 10px;
+            margin: 5px 0;
+            border-radius: 5px;
+            display: flex;
+            justify-content: space-between;
+        }
+        .logout-btn {
+            background: red;
+            color: white;
+            padding: 10px;
+            border: none;
+            cursor: pointer;
+            float: right;
+        }
+    </style>
+</head>
+<body>
+
+    <!-- ✅ Navigation Bar -->
+    <div class="navbar">
+        <div>Habit Tracker</div>
+        <div>
+            <a href="dashboard.html">Home</a>
+            <a href="addHabit.html">Add Habit</a>
+            <a href="status.html">View Status</a>
+            <a href="priority.html">Priority-wise Habits</a>
+            <button class="logout-btn" onclick="logout()">Logout</button>
+        </div>
+    </div>
+
+    <!-- ✅ Dashboard Content -->
+    <div class="container">
+        <h2>Welcome, <span id="username"></span>!</h2>
+
+        <h3>Your Habits:</h3>
+        <ul id="taskList"></ul>
+    </div>
+
+    <!-- <script>
+        // ✅ Check if user is logged in
+        const user = JSON.parse(localStorage.getItem("user"));
+        if (!user) {
+            window.location.href = "index.html";
+        } else {
+            document.getElementById("username").innerText = user.name;
+        }
+
+        // ✅ Logout Function
+        function logout() {
+            localStorage.removeItem("user");
+            window.location.href = "index.html";
+        }
+
+        // ✅ Show Existing Habits (Fetching from Local Storage)
+        const habits = JSON.parse(localStorage.getItem("habits")) || [];
+        const taskList = document.getElementById("taskList");
+
+        function displayHabits() {
+            taskList.innerHTML = "";
+            if (habits.length === 0) {
+                taskList.innerHTML = "<p>No habits added yet.</p>";
+                return;
+            }
+            habits.forEach((habit, index) => {
+                const li = document.createElement("li");
+                li.classList.add("task");
+                li.innerHTML = `${habit} <button onclick="deleteHabit(${index})">❌</button>`;
+                taskList.appendChild(li);
+            });
+        }
+
+        // ✅ Delete Habit Function
+        function deleteHabit(index) {
+            habits.splice(index, 1);
+            localStorage.setItem("habits", JSON.stringify(habits));
+            displayHabits();
+        }
+
+        // ✅ Display Habits on Page Load
+        displayHabits();
+    </script> -->
+    <script>
+        // ✅ Check if user is logged in
+        const user = JSON.parse(localStorage.getItem("user"));
+        if (!user) {
+            window.location.href = "index.html";
+        } else {
+            document.getElementById("username").innerText = user.name;
+        }
+    
+        // ✅ Fetch Habits from MongoDB
+        async function fetchHabits() {
+            try {
+                const response = await fetch(`http://localhost:3000/api/habits/all/${user.email}`);
+                const data = await response.json();
+    
+                if (data.success) {
+                    displayHabits(data.habits);
+                } else {
+                    document.getElementById("taskList").innerHTML = "<p>Error loading habits.</p>";
+                }
+            } catch (error) {
+                console.error("🔥 Error fetching habits:", error);
+                document.getElementById("taskList").innerHTML = "<p>Server error. Try again later.</p>";
+            }
+        }
+    
+        // ✅ Display Habits in the UI
+        function displayHabits(habits) {
+            const taskList = document.getElementById("taskList");
+            taskList.innerHTML = "";
+    
+            if (habits.length === 0) {
+                taskList.innerHTML = "<p>No habits added yet.</p>";
+                return;
+            }
+    
+            habits.forEach((habit) => {
+                const li = document.createElement("li");
+                li.classList.add("task");
+                li.innerHTML = `
+                    <div>
+                        <strong>${habit.name}</strong> - ${habit.category} <br>
+                        📅 Start: ${new Date(habit.startDate).toDateString()} | 
+                        ⏳ End: ${new Date(habit.endDate).toDateString()} |
+                        ✅ Status: ${habit.status}
+                    </div>
+                `;
+                taskList.appendChild(li);
+            });
+        }
+    
+        // ✅ Logout Function
+        function logout() {
+            localStorage.removeItem("user");
+            window.location.href = "index.html";
+        }
+    
+        // ✅ Fetch habits on page load
+        fetchHabits();
+    </script>
+    
+
+</body>
+</html>
