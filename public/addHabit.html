@@ -7,54 +7,126 @@
             font-family: Arial, sans-serif;
             margin: 0;
             padding: 0;
-            background-color: #f4f4f4;
+            background-color: #f4f7fb;
         }
-        .navbar {
-            background: #333;
-            color: white;
-            padding: 15px;
+
+/* Navigation Bar */
+.navbar {
+            background-color: #51345e;
+            color: #fff;
+            padding: 25px 20px;
             display: flex;
             justify-content: space-between;
             align-items: center;
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
         }
+
         .navbar a {
-            color: white;
+            color: #fff;
             text-decoration: none;
             padding: 10px 15px;
+            margin-left: 15px;
+            font-size: 16px;
+            border-radius: 5px;
+            transition: background-color 0.3s;
         }
+
         .navbar a:hover {
-            background: #555;
+            background-color: #2980b9;
         }
-        .container {
-            max-width: 500px;
-            margin: 20px auto;
-            padding: 20px;
+
+        .navbar button {
+            background-color: #e74c3c;
+            color: #fff;
+            border: none;
+            padding: 10px 20px;
+            cursor: pointer;
+            font-size: 16px;
+            border-radius: 5px;
+            transition: background-color 0.3s;
+        }
+
+        .navbar button:hover {
+            background-color: #c0392b;
+        }
+
+
+
+                .container {
+            max-width: 600px;
+            margin: 40px auto;
+            padding: 30px;
             background: white;
-            border-radius: 10px;
-            box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.1);
+            border-radius: 12px;
+            box-shadow: 0px 0px 20px rgba(0, 0, 0, 0.1);
             text-align: center;
         }
-        input, select, button {
+
+        h2 {
+            margin-bottom: 20px;
+            font-size: 24px;
+            color: #333;
+        }
+
+        input, select, textarea, button {
             width: 100%;
-            padding: 10px;
+            padding: 12px;
             margin: 10px 0;
-            border: none;
-            border-radius: 5px;
-        }
-        input, select {
             border: 1px solid #ccc;
+            border-radius: 8px;
+            font-size: 16px;
+            box-sizing: border-box;
+            transition: border-color 0.3s ease;
         }
+
+        input:focus, select:focus, textarea:focus {
+            border-color: #3498db;
+        }
+
+        textarea {
+            resize: vertical;
+            height: 100px;
+        }
+
+        label {
+            font-weight: 600;
+            text-align: left;
+            margin-top: 10px;
+            display: block;
+        }
+
         button {
             background: #28a745;
             color: white;
             cursor: pointer;
+            border: none;
         }
+
         button:hover {
             background: #218838;
         }
+
         .message {
             color: red;
+            font-weight: bold;
         }
+
+        .back-link {
+            display: block;
+            margin-top: 20px;
+            color: #3498db;
+            text-decoration: none;
+        }
+
+        .back-link:hover {
+            text-decoration: underline;
+        }
+
+        .navbar a {
+                margin-left: 5px;
+                margin-top: 5px;
+                font-size: 16px;
+            }
     </style>
 </head>
 <body>
@@ -77,27 +149,28 @@
         <form id="habitForm">
             <input type="text" id="habitName" placeholder="Habit Name" required>
             <input type="text" id="habitCategory" placeholder="Category" required>
-            <label>Start Date:</label>
+            <label for="startDate">Start Date:</label>
             <input type="date" id="startDate" required>
-            <label>End Date:</label>
+            <label for="endDate">End Date:</label>
             <input type="date" id="endDate" required>
 
-            <label>Priority (1-10):</label>
+            <label for="priority">Priority (1-10):</label>
             <input type="number" id="priority" min="1" max="10" required>
     
-            <label>Goal Description:</label>
+            <label for="goalDescription">Goal Description:</label>
             <textarea id="goalDescription" placeholder="Describe your goal..." rows="3" required></textarea>
     
-
+            <label for="status">Status:</label>
             <select id="status">
                 <option value="Not Started">Not Started</option>
                 <option value="In Progress">In Progress</option>
                 <option value="Completed">Completed</option>
             </select>
+
             <button type="submit">Add Habit</button>
         </form>
         <p class="message" id="message"></p>
-        <a href="dashboard.html">Back to Dashboard</a>
+        <a href="dashboard.html" class="back-link">Back to Dashboard</a>
     </div>
 
     <script>
@@ -109,15 +182,15 @@
                 window.location.href = "index.html";
                 return;
             }
-            // console.log(user);
+
             const habitData = {
                 userId: user.email,  // Associate habit with user
                 name: document.getElementById("habitName").value.trim(),
                 category: document.getElementById("habitCategory").value.trim(),
                 startDate: document.getElementById("startDate").value,
                 endDate: document.getElementById("endDate").value,
-                priority: document.getElementById("priority").value,  // New Priority Field
-                goalDescription: document.getElementById("goalDescription").value.trim(), 
+                priority: document.getElementById("priority").value,
+                goalDescription: document.getElementById("goalDescription").value.trim(),
                 status: document.getElementById("status").value
             };
 
@@ -126,7 +199,7 @@
                 headers: { "Content-Type": "application/json" },
                 body: JSON.stringify(habitData)
             });
-            console.log("got responce");
+
             const result = await response.json();
             const message = document.getElementById("message");
 
@@ -140,6 +213,7 @@
             }
         });
     </script>
+
 
 </body>
 </html>

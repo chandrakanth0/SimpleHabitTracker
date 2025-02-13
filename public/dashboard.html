@@ -3,63 +3,150 @@
 <head>
     <title>Habit Tracker Dashboard</title>
     <style>
-        body {
-            font-family: Arial, sans-serif;
+        /* Base Reset */
+        * {
             margin: 0;
             padding: 0;
-            background-color: #f4f4f4;
+            box-sizing: border-box;
         }
+
+        body {
+            font-family: 'Arial', sans-serif;
+            background-color: #dcdad5;
+            color: #333;
+        }
+
+        /* Navigation Bar */
         .navbar {
-            background: #333;
-            color: white;
+            background-color: #51345e;
+            color: #fff;
+            padding: 15px 20px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+        }
+
+        .navbar a {
+            color: #fff;
+            text-decoration: none;
+            padding: 10px 15px;
+            margin-left: 15px;
+            font-size: 16px;
+            border-radius: 5px;
+            transition: background-color 0.3s;
+        }
+
+        .navbar a:hover {
+            background-color: #2980b9;
+        }
+
+        .navbar button {
+            background-color: #e74c3c;
+            color: #fff;
+            border: none;
+            padding: 10px 20px;
+            cursor: pointer;
+            font-size: 16px;
+            border-radius: 5px;
+            transition: background-color 0.3s;
+        }
+
+        .navbar button:hover {
+            background-color: #c0392b;
+        }
+
+        /* Dashboard Container */
+        .container {
+            max-width: 850px;
+            margin: 30px auto;
+            padding: 20px;
+            background-color: #fff;
+            border-radius: 8px;
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.05);
+        }
+
+        h2 {
+            font-size: 24px;
+            margin-bottom: 10px;
+            text-align: center;
+            color: #2c3e50;
+        }
+
+        h3 {
+            margin-top: 20px;
+            font-size: 20px;
+            color: #2c3e50;
+        }
+
+        /* Habit List */
+        #taskList {
+            list-style: none;
+            padding: 0;
+            margin-top: 20px;
+        }
+
+        .task {
+            background-color: #ecf0f1;
             padding: 15px;
+            margin-bottom: 12px;
+            border-radius: 6px;
+            box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
             display: flex;
             justify-content: space-between;
             align-items: center;
         }
-        .navbar a {
+
+        .task div {
+            max-width: 70%;
+        }
+
+        .task button {
+            background-color: #e74c3c;
             color: white;
-            text-decoration: none;
-            padding: 10px 15px;
-        }
-        .navbar a:hover {
-            background: #555;
-        }
-        .container {
-            max-width: 800px;
-            margin: 20px auto;
-            padding: 20px;
-            background: white;
-            border-radius: 10px;
-            box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.1);
-        }
-        h2 {
-            text-align: center;
-        }
-        #taskList {
-            list-style: none;
-            padding: 0;
-        }
-        .task {
-            background: #e3f2fd;
-            padding: 10px;
-            margin: 5px 0;
-            border-radius: 5px;
-            display: flex;
-            justify-content: space-between;
-        }
-        .logout-btn {
-            background: red;
-            color: white;
-            padding: 10px;
             border: none;
+            padding: 6px 12px;
+            border-radius: 5px;
             cursor: pointer;
-            float: right;
+            transition: background-color 0.3s;
+        }
+
+        .task button:hover {
+            background-color: #c0392b;
+        }
+
+        /* No Habits Message */
+        #taskList p {
+            font-size: 16px;
+            color: #7f8c8d;
+            text-align: center;
+            margin-top: 20px;
+        }
+
+        /* Responsiveness */
+        @media (max-width: 768px) {
+            .navbar {
+                flex-direction: column;
+                align-items: flex-start;
+            }
+
+            .navbar a {
+                margin-left: 0;
+                margin-top: 5px;
+                font-size: 14px;
+            }
+
+            .container {
+                padding: 15px;
+            }
+
+            .task {
+                padding: 10px;
+            }
         }
     </style>
 </head>
 <body>
-
     <!-- ✅ Navigation Bar -->
     <div class="navbar">
         <div>Habit Tracker</div>
@@ -80,49 +167,6 @@
         <ul id="taskList"></ul>
     </div>
 
-    <!-- <script>
-        // ✅ Check if user is logged in
-        const user = JSON.parse(localStorage.getItem("user"));
-        if (!user) {
-            window.location.href = "index.html";
-        } else {
-            document.getElementById("username").innerText = user.name;
-        }
-
-        // ✅ Logout Function
-        function logout() {
-            localStorage.removeItem("user");
-            window.location.href = "index.html";
-        }
-
-        // ✅ Show Existing Habits (Fetching from Local Storage)
-        const habits = JSON.parse(localStorage.getItem("habits")) || [];
-        const taskList = document.getElementById("taskList");
-
-        function displayHabits() {
-            taskList.innerHTML = "";
-            if (habits.length === 0) {
-                taskList.innerHTML = "<p>No habits added yet.</p>";
-                return;
-            }
-            habits.forEach((habit, index) => {
-                const li = document.createElement("li");
-                li.classList.add("task");
-                li.innerHTML = `${habit} <button onclick="deleteHabit(${index})">❌</button>`;
-                taskList.appendChild(li);
-            });
-        }
-
-        // ✅ Delete Habit Function
-        function deleteHabit(index) {
-            habits.splice(index, 1);
-            localStorage.setItem("habits", JSON.stringify(habits));
-            displayHabits();
-        }
-
-        // ✅ Display Habits on Page Load
-        displayHabits();
-    </script> -->
     <script>
         // ✅ Check if user is logged in
         const user = JSON.parse(localStorage.getItem("user"));
@@ -183,7 +227,5 @@
         // ✅ Fetch habits on page load
         fetchHabits();
     </script>
-    
-
 </body>
 </html>
