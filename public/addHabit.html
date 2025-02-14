@@ -194,7 +194,10 @@
                 endDate: document.getElementById("endDate").value,
                 priority: document.getElementById("priority").value,
                 goalDescription: document.getElementById("goalDescription").value.trim(),
-                status: document.getElementById("status").value
+                status: document.getElementById("status").value,
+                streak: 0,  // ✅ Initialize streak
+                completedDates: [] 
+                
             };
 
             const response = await fetch("http://localhost:3000/api/habits/add", {
