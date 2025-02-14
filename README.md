@@ -41,7 +41,7 @@ A simple **habit tracking** web application built using **MongoDB, Express.js, a
 
 
 ### 1️⃣ Clone the Repository  
-git clone https://github.com/yourusername/habit-tracker.git
+git clone https://github.com/chandrakanth0/SimpleHabitTracker.git
 cd habit-tracker
 
 # install dependency 
@@ -49,7 +49,7 @@ npm install
 
 # create your .env
 MONGO_URI=your_mongodb_connection_string
-PORT=5000
+PORT=3000
 JWT_SECRET=jwt_secret_123
 
 
